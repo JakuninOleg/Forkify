@@ -1,6 +1,7 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 // Global state of the app
@@ -54,11 +55,13 @@ const controlRecipe = async () => {
 
   if (id) {
     //  Prepare UI for changes
+
+    // Create new recipe object
+    state.recipe = new Recipe(id);
     try {
-      // Create new recipe object
-      state.recipe = new Recipe(id);
-      // Get recipe data
+      // Get recipe data and parse ingredients
       await state.recipe.getRecipe();
+      state.recipe.parseIngredients();
       // Calculate servings and time
       state.recipe.calcTime();
       state.recipe.calcServings();
