@@ -1,11 +1,12 @@
 import Search from './models/Search';
+import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
 import { elements, renderLoader, clearLoader } from './views/base';
-import { basename } from 'path';
 
 // Global state of the app
 const state = {};
 
+// Search controller
 const controlSearch = async () => {
   // 1. Get query from the view
   const query = searchView.getInput();
@@ -18,13 +19,17 @@ const controlSearch = async () => {
     searchView.clearInput();
     searchView.clearResults();
     renderLoader(elements.searchRes);
+    try {
+      // 4. Search for results
+      await state.search.getResults();
 
-    // 4. Search for results
-    await state.search.getResults();
-
-    // 5. Redner result to the UI
-    clearLoader();
-    searchView.renderResults(state.search.result);
+      // 5. Redner result to the UI
+      clearLoader();
+      searchView.renderResults(state.search.result);
+    } catch (error) {
+      console.log(error);
+      clearLoader();
+    }
   }
 }
 
@@ -36,9 +41,33 @@ elements.searchForm.addEventListener('submit', e => {
 elements.searchResPages.addEventListener('click', e => {
   e.preventDefault;
   const btn = e.target.closest('.btn-inline');
-  if(btn) {
+  if (btn) {
     const goToPage = parseInt(btn.dataset.goto, 10);
     searchView.clearResults();
     searchView.renderResults(state.search.result, goToPage);
   }
 })
+
+// Recipe controller
+const controlRecipe = async () => {
+  const id = window.location.hash.replace('#', '');
+
+  if (id) {
+    //  Prepare UI for changes
+    try {
+      // Create new recipe object
+      state.recipe = new Recipe(id);
+      // Get recipe data
+      await state.recipe.getRecipe();
+      // Calculate servings and time
+      state.recipe.calcTime();
+      state.recipe.calcServings();
+      //  Render the recipe‰
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
+
+['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
