@@ -1,5 +1,4 @@
 import { elements } from './base';
-import { isBuffer } from 'util';
 
 export const getInput = () => elements.searchInput.value;
 
@@ -17,7 +16,15 @@ export const clearResults = () => {
   }
 };
 
-const limitRecipeTitle = (title, limit = 17) => {
+export const highlightSelected = id => {
+  const resultsArr = Array.from(document.querySelectorAll('.results__link'));
+
+  resultsArr.forEach(el => el.classList.remove('results__link--active'));
+
+  document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+};
+
+export const limitRecipeTitle = (title, limit = 17) => {
   const newTitle = [];
   if (title.length > limit) {
     title.split(' ').reduce((acc, curr) => {
@@ -71,7 +78,6 @@ const renderButtons = (page, numResults, resPerPage) => {
   }
 
   elements.searchResPages.insertAdjacentHTML('afterbegin', button);
-
 };
 
 export const renderResults = (recipes, page = 1, resPerPage = 10) => {
