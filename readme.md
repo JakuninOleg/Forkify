@@ -6,5 +6,5 @@
 - Search for the recipes and try to coook it on your own
 - Add recipes you love to the local storage
 
-* Demo * 
-** https://forkify-es6.netlify.com/ **
+*Demo* 
+**https://forkify-es6.netlify.com/**
