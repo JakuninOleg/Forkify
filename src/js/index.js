@@ -18,7 +18,6 @@ const controlLike = () => {
   const currentID = state.recipe.id;
 
   state.likes.isLiked(currentID);
-  console.log(state.likes);
 
   if (!state.likes.isLiked(currentID)) {
 
@@ -28,8 +27,6 @@ const controlLike = () => {
       state.recipe.author,
       state.recipe.image
     );
-
-    console.log(newLike);
 
     likeView.toggleLikeBtn(true);
     likeView.renderLike(newLike);
@@ -122,7 +119,7 @@ const controlRecipe = async () => {
 
 //  List controller
 
-window.addEventListener('load',  () => {
+window.addEventListener('load', () => {
   state.likes = new Like();
   state.likes.readStorage();
   likeView.toggleLikeMenu(state.likes.getNumLikes());

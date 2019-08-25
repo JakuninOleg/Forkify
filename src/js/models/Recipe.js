@@ -86,7 +86,6 @@ export default class Recipe {
     });
 
     this.ingredients = newIngredients;
-    console.log(this.ingredients);
   }
 
   updateServings(type) {
